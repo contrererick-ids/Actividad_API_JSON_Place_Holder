@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Usuarios</title>
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+<body>
+  <div class="container">
+    <h1>Usuarios</h1>
+    <div class="controls">
+      <button onclick="loadAllUsers()">Cargar Todos los Usuarios</button>
+      <input type="number" id="userId" placeholder="ID del usuario" min="1" max="10">
+      <button onclick="loadUserById()">Buscar por ID</button>
+    </div>
+
+    <div id="users-container"></div>
+  </div>
+
+  <script>
+    const container = document.getElementById('users-container');
+
+    async function loadAllUsers() {
+      container.innerHTML = '<div class="loading">Cargando usuarios...</div>';
+      
+      try {
+        const response = await fetch('/api/users');
+        if (!response.ok) throw new Error('Error al cargar usuarios');
+        
+        const users = await response.json();
+        displayUsers(users);
+      } catch (error) {
+        container.innerHTML = `<div class="error">${error.message}</div>`;
+      }
+    }
+
+    async function loadUserById() {
+      const userId = document.getElementById('userId').value;
+      
+      if (!userId) {
+        alert('Por favor ingresa un ID de usuario');
+        return;
+      }
+
+      container.innerHTML = '<div class="loading">Buscando usuario...</div>';
+      
+      try {
+        const response = await fetch(`/api/users/${userId}`);
+        if (!response.ok) throw new Error('Usuario no encontrado');
+        
+        const user = await response.json();
+        displayUsers([user]);
+      } catch (error) {
+        container.innerHTML = `<div class="error">${error.message}</div>`;
+      }
+    }
+
+
+    // Función para mostrar usuarios en la interfaz
+    function displayUsers(users) {
+      container.innerHTML = '';
+      
+      users.forEach(user => {
+        const card = document.createElement('div');
+        card.className = 'user-card';
+        card.innerHTML = `
+          <h3>${user.name}</h3>
+          <p><strong>Username:</strong> ${user.username}</p>
+          <p><strong>Email:</strong> ${user.email}</p>
+          <p><strong>Dirección:</strong> ${user.address.street}, ${user.address.suite}, ${user.address.city}, ${user.address.zipcode}</p>
+          <p><strong>Coordenadas:</strong> Lat: ${user.address.geo.lat}, Lng: ${user.address.geo.lng}</p>
+          <p><strong>Teléfono:</strong> ${user.phone}</p>
+          <p><strong>Website:</strong> <a href="http://${user.website}" target="_blank">${user.website}</a></p>
+          <p><strong>Empresa:</strong> ${user.company.name}, "${user.company.catchPhrase}", ${user.company.bs}</p>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Cargar usuarios al iniciar
+    loadAllUsers();
+  </script>
+</body>
+</html>

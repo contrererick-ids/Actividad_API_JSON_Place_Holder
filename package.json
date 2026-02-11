@@ -1,0 +1,25 @@
+{
+  "name": "actividad_api_json_place_holder",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/contrererick-ids/Actividad_API_JSON_Place_Holder.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/contrererick-ids/Actividad_API_JSON_Place_Holder/issues"
+  },
+  "homepage": "https://github.com/contrererick-ids/Actividad_API_JSON_Place_Holder#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
